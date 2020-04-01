@@ -1,0 +1,24 @@
+{
+  "signing": {
+    "default": {
+      "remote": "ca"
+    },
+    "profiles": {
+      "auth": {
+        "auth_remote": {
+          "auth_key": "key1",
+          "remote": "ca"
+        }
+      }
+    }
+  },
+  "auth_keys": {
+    "key1": {
+      "type": "standard",
+      "key": "REPLACE_AUTH_KEY_HERE"
+    }
+  },
+  "remotes": {
+    "ca": "localhost:8888"
+  }
+}

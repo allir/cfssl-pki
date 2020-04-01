@@ -1,0 +1,18 @@
+{
+  "hosts": [
+    "local.example.com"
+  ],
+  "CN": "local.example.com",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "IS",
+      "L": "Hafnarfjordur",
+      "O": "allir",
+      "OU": "Local Services"
+    }
+  ]
+}

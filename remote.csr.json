@@ -1,0 +1,19 @@
+{
+    "hosts": [
+      "remote.example.com"
+    ],
+    "CN": "remote.example.com",
+    "key": {
+      "algo": "rsa",
+      "size": 2048
+    },
+    "names": [
+      {
+        "C": "IS",
+        "L": "Hafnarfjordur",
+        "O": "allir",
+        "OU": "Remote Services"
+      }
+    ]
+  }
+  
