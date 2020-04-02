@@ -14,9 +14,9 @@ Setting up your own PKI using [CFSSL](https://github.com/cloudflare/cfssl)
 
 ## Using
 
-### Setup CA
+### Setup CA & Intermediate
 
-#### Generate the CA key and certificate
+#### Generate the CA key, certificate and configuration
 
 This will generate the new key and certificate based on the `ca.csr.json` template.
 
@@ -24,27 +24,42 @@ This will generate the new key and certificate based on the `ca.csr.json` templa
 cfssl gencert -initca ca.csr.json | cfssljson -bare ca
 ```
 
-#### Create CA config
-
-Configure the CA to have a default profile and an authenticated profile. The default profile will issues certificates for 1 year while the authenticated one will issue certificates for 5 years. For the authentication we generate a new random `AUTH_KEY` for the `auth` profile and save it in the CA config `ca.service.json`.
+Generate an `AUTH_KEY` that we'll use for authenticated requests.
 
 ```bash
 hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/random > auth_key
+```
 
+Configure the CA to have a default profile and an authenticated profile. The default profile will issues certificates for 1 year while the authenticated one will issue certificates for 5 years. For the authentication we generate a new random `AUTH_KEY` for the `auth` profile and save it in the CA config `ca.config.json`.
+
+```bash
 AUTH_KEY=$(cat auth_key)
 sed -i "s/REPLACE_AUTH_KEY_HERE/${AUTH_KEY}/" ca.config.json
+```
+
+#### Generate Intermediate key, certificate and configuration.
+
+We'll generate a new intermediate CA and sign it using the Root CA. Also set up the `auth` configuration file for the Intermediate, `intermediate.config.json`.
+For simplicity we use the same `AUTH_KEY` for the root and intermediate authentication.
+
+```bash
+cfssl gencert -initca intermediate.csr.json | cfssljson -bare intermediate
+cfssl sign -ca ca.pem -ca-key ca-key.pem -config ca.config.json -profile ca intermediate.csr | cfssljson -bare intermediate
+
+AUTH_KEY=$(cat auth_key)
+sed -i "s/REPLACE_AUTH_KEY_HERE/${AUTH_KEY}/" intermediate.config.json
 ```
 
 ### Requesting certificates locally
 
 #### Request a certificate
 
-Request new certificates using the certificate and key files for the CA. We'll use the same CSR but save two versions of it, one using the default signing profile and the other using the authenticated one.
+Request new certificates using the certificate and key files for the Intermediate CA. We'll use the same CSR but save two versions of it, one using the default signing profile and the other using the authenticated one.
 We can then run `cfssl certinfo` to verify the difference, one being valid for one year while the other is valid for five.
 
 ```bash
-cfssl gencert -config ca.config.json -ca ca.pem -ca-key ca-key.pem local.csr.json | cfssljson -bare local
-cfssl gencert -config ca.config.json -profile auth -ca ca.pem -ca-key ca-key.pem local.csr.json | cfssljson -bare local-auth
+cfssl gencert -config intermediate.config.json -ca intermediate.pem -ca-key intermediate-key.pem local.csr.json | cfssljson -bare local
+cfssl gencert -config intermediate.config.json -profile auth -ca intermediate.pem -ca-key intermediate-key.pem local.csr.json | cfssljson -bare local-auth
 
 # Should have "not_after" date in one year
 cfssl certinfo -cert local.pem
@@ -56,10 +71,10 @@ cfssl certinfo -cert local-auth.pem
 
 #### Run the CA as a service
 
-This will run the CA service, listening on port 8888, using the configuration file.
+This will run the Intermediate CA as a service, listening on port 8888, using the configuration file.
 
 ```bash
-cfssl serve -ca-key ca-key.pem -ca ca.pem -config ca.config.json
+cfssl serve -ca intermediate.pem -ca-key intermediate-key.pem -config intermediate.config.json
 ```
 
 #### Request a certificate

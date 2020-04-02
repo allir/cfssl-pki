@@ -1,8 +1,8 @@
 {
-    "hosts": [
-        "remote.example.com"
-    ],
-    "CN": "remote.example.com",
+    "ca": {
+        "expiry": "43800h"
+    },
+    "CN": "allir Issuing CA",
     "key": {
         "algo": "rsa",
         "size": 2048
@@ -12,7 +12,7 @@
             "C": "IS",
             "L": "Hafnarfjordur",
             "O": "allir",
-            "OU": "Remote Services"
+            "OU": "CA"
         }
     ]
 }

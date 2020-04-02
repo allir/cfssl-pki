@@ -19,16 +19,6 @@
                     "server auth",
                     "client auth"
                 ]
-            },
-            "ca": {
-                "auth_key": "key1",
-                "expiry": "43800h",
-                "usages": [
-                    "digital signature",
-                    "cert sign",
-                    "crl sign","signing"
-                ],
-                "ca_constraint": {"is_ca": true, "max_path_len":0, "max_path_len_zero": true}
             }
         }
     },

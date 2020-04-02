@@ -1,18 +1,18 @@
 {
-  "ca": {
-    "expiry": "87660h"
-  },
-  "CN": "allir CA",
-  "key": {
-    "algo": "rsa",
-    "size": 2048
-  },
-  "names": [
-    {
-      "C": "IS",
-      "L": "Hafnarfjordur",
-      "O": "allir",
-      "OU": "CA"
-    }
-  ]
+    "ca": {
+        "expiry": "87600h"
+    },
+    "CN": "allir Root CA",
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "IS",
+            "L": "Hafnarfjordur",
+            "O": "allir",
+            "OU": "CA"
+        }
+    ]
 }
