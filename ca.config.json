@@ -2,17 +2,34 @@
     "signing": {
         "default": {
             "expiry": "8760h",
-            "usages": [
-                "signing",
-                "key encipherment",
-                "server auth",
-                "client auth"
-            ]
+            "crl_url": "http://localhost:8888/api/v1/cfssl/crl",
+            "ocsp_url": "http://localhost:8889"
         },
         "profiles": {
-            "auth": {
+            "intermediate": {
                 "auth_key": "key1",
-                "expiry": "43830h",
+                "expiry": "43800h",
+                "usages": [
+                    "cert sign",
+                    "crl sign"
+                ],
+                "ca_constraint": {
+                    "is_ca": true,
+                    "max_path_len": 0,
+                    "max_path_len_zero": true
+                }
+            },
+            "ocsp": {
+                "auth_key": "key1",
+                "expiry": "43800h",
+                "usages": [
+                    "digital signature",
+                    "ocsp signing"
+                ]
+            },
+            "server": {
+                "auth_key": "key1",
+                "expiry": "8760h",
                 "usages": [
                     "signing",
                     "key encipherment",
@@ -20,15 +37,15 @@
                     "client auth"
                 ]
             },
-            "ca": {
+            "client": {
                 "auth_key": "key1",
-                "expiry": "43800h",
+                "expiry": "8760h",
                 "usages": [
-                    "digital signature",
-                    "cert sign",
-                    "crl sign","signing"
-                ],
-                "ca_constraint": {"is_ca": true, "max_path_len":0, "max_path_len_zero": true}
+                    "signing",
+                    "key encipherment",
+                    "client auth",
+                    "email protection"
+                ]
             }
         }
     },
