@@ -1,3 +1,5 @@
 /auth_key
 /*.pem
 /*.csr
+/cert.db
+/ocsp_data.txt

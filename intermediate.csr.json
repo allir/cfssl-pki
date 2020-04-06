@@ -2,10 +2,10 @@
     "ca": {
         "expiry": "43800h"
     },
-    "CN": "allir Issuing CA",
+    "CN": "allir Intermediate CA",
     "key": {
-        "algo": "rsa",
-        "size": 2048
+        "algo": "ecdsa",
+        "size": 256
     },
     "names": [
         {
