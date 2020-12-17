@@ -6,7 +6,7 @@ AUTH_KEY=$(cat auth_key)
 sed -i "s/REPLACE_AUTH_KEY_HERE/${AUTH_KEY}/" ca.config.json
 sed -i "s/REPLACE_AUTH_KEY_HERE/${AUTH_KEY}/" client.config.json
 
-cat scripts/create-certificate-db-sqlite.sql | sqlite3 cert.db
+sqlite3 cert.db < scripts/create-certificate-db-sqlite.sql
 
 cfssl gencert -initca ca.csr.json | cfssljson -bare ca
 
